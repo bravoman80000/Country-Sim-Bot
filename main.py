@@ -29,13 +29,18 @@ async def on_ready():
     print(f"Logged in as {bot.user}! The Archivist awaits...")
 
 
-modules.war.war_commands.setup(bot)
-modules.misc.setup(bot)
-modules.war.war_view.setup(bot)
-modules.war.war_ledger.setup(bot)
-modules.civil.country_queries.setup(bot)
-modules.civil.country_register.setup(bot)
+async def main():
+    setup_logging()
+    await modules.war.war_commands.setup(bot)
+    await modules.misc.setup(bot)
+    await modules.war.war_view.setup(bot)
+    await modules.war.war_ledger.setup(bot)
+    await modules.civil.country_queries.setup(bot)
+    await modules.civil.country_register.setup(bot)
+
+    await bot.start(TOKEN)
 
 if __name__ == "__main__":
-    setup_logging()
-    bot.run(TOKEN)
+    import asyncio
+    asyncio.run(main())
+

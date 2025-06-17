@@ -10,6 +10,10 @@ import modules.war.war_ledger
 import modules.civil.country_queries
 import modules.civil.country_register
 import modules.civil.year_tracker
+import modules.civil.country_modifiers
+import modules.debug_commands
+
+
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 
@@ -42,7 +46,8 @@ async def main():
     await modules.civil.country_queries.setup(bot)
     await modules.civil.country_register.setup(bot)
     await modules.civil.year_tracker.setup(bot)
-
+    await modules.civil.country_modifiers.setup(bot)
+    await modules.debug_commands.setup(bot)
 
     # Slash sync comes LAST
     try:

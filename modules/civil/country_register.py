@@ -164,5 +164,6 @@ class CountryRegister(commands.Cog):
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
+
 async def setup(bot):
     await bot.add_cog(CountryRegister(bot))

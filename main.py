@@ -41,6 +41,8 @@ async def main():
     # Sync async cogs
     await modules.civil.country_queries.setup(bot)
     await modules.civil.country_register.setup(bot)
+    await modules.civil.year_tracker.setup(bot)
+
 
     # Slash sync comes LAST
     try:

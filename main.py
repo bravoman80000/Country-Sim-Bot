@@ -29,18 +29,30 @@ async def on_ready():
     print(f"Logged in as {bot.user}! The Archivist awaits...")
 
 
+@bot.event
+async def on_ready():
+    print(f"✅ Logged in as {bot.user}! The Archivist awaits...")
+
+
 async def main():
     setup_logging()
 
-    # These are normal functions
+    # Sync regular (non-async) cogs
     modules.war.war_commands.setup(bot)
     modules.misc.setup(bot)
     modules.war.war_view.setup(bot)
     modules.war.war_ledger.setup(bot)
 
-    # These are async functions, so we must await
+    # Sync async cogs
     await modules.civil.country_queries.setup(bot)
     await modules.civil.country_register.setup(bot)
+
+    # Slash sync comes LAST
+    try:
+        synced = await bot.tree.sync()
+        print(f"🔁 Synced {len(synced)} slash commands.")
+    except Exception as e:
+        print(f"❌ Error syncing slash commands: {e}")
 
     await bot.start(TOKEN)
 
@@ -48,4 +60,3 @@ async def main():
 if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
-

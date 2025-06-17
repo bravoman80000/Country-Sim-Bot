@@ -31,14 +31,19 @@ async def on_ready():
 
 async def main():
     setup_logging()
-    await modules.war.war_commands.setup(bot)
-    await modules.misc.setup(bot)
-    await modules.war.war_view.setup(bot)
-    await modules.war.war_ledger.setup(bot)
+
+    # These are normal functions
+    modules.war.war_commands.setup(bot)
+    modules.misc.setup(bot)
+    modules.war.war_view.setup(bot)
+    modules.war.war_ledger.setup(bot)
+
+    # These are async functions, so we must await
     await modules.civil.country_queries.setup(bot)
     await modules.civil.country_register.setup(bot)
 
     await bot.start(TOKEN)
+
 
 if __name__ == "__main__":
     import asyncio

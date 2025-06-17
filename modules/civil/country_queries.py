@@ -12,13 +12,14 @@ def load_countries():
         return json.load(f)
 
 # === Autocomplete Helper ===
-def autocomplete_country_names(current: str):
+async def autocomplete_country_names(interaction: discord.Interaction, current: str):
     data = load_countries()
     return [
         app_commands.Choice(name=name, value=name)
         for name in data
         if current.lower() in name.lower()
     ][:25]
+
 
 # === Tiers for Reference ===
 ECONOMY_TIERS = {

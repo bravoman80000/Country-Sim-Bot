@@ -1,0 +1,15 @@
+{
+  "wars": [
+    {
+      "name": "Eoghain-Chonaill War",
+      "attacker": "Eoghain",
+      "defender": "Chonaill",
+      "momentum": 0,
+      "intensity": 4,
+      "attacker_emoji": "\ud83d\udfe5",
+      "defender_emoji": "\ud83d\udfe6",
+      "status": "active",
+      "started_at": "2025-06-16"
+    }
+  ]
+}

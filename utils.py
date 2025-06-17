@@ -30,7 +30,7 @@ def interpret_roll(result):
         7: "Narrow turnout (Upper)",
         8: "Normal turnout (Upper)",
         9: "Critical turnout (Upper)",
-        10: "Best turnout"
+        10: "Best turnout",
     }
     return outcomes.get(result, "Invalid result")
 

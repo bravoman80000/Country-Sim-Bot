@@ -1,19 +1,22 @@
 import os
-import discord
-from discord.ext import commands
+import discord # type: ignore
+from discord.ext import commands # type: ignore
 
 from utils import setup_logging
-import modules.war_commands
+import modules.war.war_commands
 import modules.misc
-import modules.war_view
-import modules.war_ledger
-from modules.year_tracker import start_new_turn
+import modules.war.war_view
+import modules.war.war_ledger
+import modules.civil.country_queries
+import modules.civil.country_register
+from modules.civil.year_tracker import start_new_turn
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
+
 
 @bot.event
 async def on_ready():
@@ -25,10 +28,13 @@ async def on_ready():
         print(f"Error syncing commands: {e}")
     print(f"Logged in as {bot.user}! The Archivist awaits...")
 
-modules.war_commands.setup(bot)
+
+modules.war.war_commands.setup(bot)
 modules.misc.setup(bot)
-modules.war_view.setup(bot)
-modules.war_ledger.setup(bot)
+modules.war.war_view.setup(bot)
+modules.war.war_ledger.setup(bot)
+modules.civil.country_queries.setup(bot)
+modules.civil.country_register.setup(bot)
 
 if __name__ == "__main__":
     setup_logging()

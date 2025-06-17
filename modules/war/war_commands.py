@@ -14,19 +14,23 @@ from typing import Optional, Literal
 
 
 @is_gm_check()
-@app_commands.describe(name="The title of the war",
-                       attacker="Who is declaring the war?",
-                       defender="Who is being attacked?",
-                       intensity="How intense is the war? (1–10)",
-                       attacker_emoji="Emoji for the attacker (defaults to 🟥)",
-                       defender_emoji="Emoji for the defender (defaults to 🟦)")
-async def declarewar(interaction: discord.Interaction,
-                     name: str,
-                     attacker: str,
-                     defender: str,
-                     intensity: int = 5,
-                     attacker_emoji: str = "\U0001f7e5",
-                     defender_emoji: str = "\U0001f7e6"):
+@app_commands.describe(
+    name="The title of the war",
+    attacker="Who is declaring the war?",
+    defender="Who is being attacked?",
+    intensity="How intense is the war? (1–10)",
+    attacker_emoji="Emoji for the attacker (defaults to 🟥)",
+    defender_emoji="Emoji for the defender (defaults to 🟦)",
+)
+async def declarewar(
+    interaction: discord.Interaction,
+    name: str,
+    attacker: str,
+    defender: str,
+    intensity: int = 5,
+    attacker_emoji: str = "\U0001f7e5",
+    defender_emoji: str = "\U0001f7e6",
+):
 
     wars = load_wars()
     new_war = {
@@ -38,7 +42,7 @@ async def declarewar(interaction: discord.Interaction,
         "attacker_emoji": attacker_emoji,
         "defender_emoji": defender_emoji,
         "status": "active",
-        "started_at": str(datetime.date.today())
+        "started_at": str(datetime.date.today()),
     }
     wars["wars"].append(new_war)
     save_wars(wars)
@@ -49,7 +53,8 @@ async def declarewar(interaction: discord.Interaction,
         f"📖 Title: *{name}*\n"
         f"🔥 Intensity: {intensity} (War Bar size)\n"
         f"🗖️ Begun: {new_war['started_at']}\n"
-        f"📊 Momentum set to ⚔️ (0)")
+        f"📊 Momentum set to ⚔️ (0)"
+    )
 
 
 declarewar_cmd = app_commands.Command(
@@ -62,19 +67,21 @@ declarewar_cmd = app_commands.Command(
 
 
 @is_gm_check()
-@app_commands.describe(war="(Optional) The war this battle belongs to",
-                       attacker="Attacking faction",
-                       defender="Defending faction",
-                       modifier="Modifier (-3 to +3)",
-                       roll_mode="Roll mode: Advantage, Disadvantage, or None")
-async def resolvebattle(interaction: discord.Interaction,
-                        war: Optional[str],
-                        attacker: str,
-                        defender: str,
-                        modifier: int = 0,
-                        roll_mode: Optional[Literal["Advantage",
-                                                    "Disadvantage",
-                                                    "None"]] = "None"):
+@app_commands.describe(
+    war="(Optional) The war this battle belongs to",
+    attacker="Attacking faction",
+    defender="Defending faction",
+    modifier="Modifier (-3 to +3)",
+    roll_mode="Roll mode: Advantage, Disadvantage, or None",
+)
+async def resolvebattle(
+    interaction: discord.Interaction,
+    war: Optional[str],
+    attacker: str,
+    defender: str,
+    modifier: int = 0,
+    roll_mode: Optional[Literal["Advantage", "Disadvantage", "None"]] = "None",
+):
     roll_1 = random.randint(1, 10)
     roll_2 = random.randint(1, 10)
 
@@ -90,8 +97,7 @@ async def resolvebattle(interaction: discord.Interaction,
 
     final_roll = max(1, min(10, base_roll + modifier))
     outcome = interpret_roll(final_roll)
-    war_title = war.replace("_",
-                            " ").title() if war else "Independent Engagement"
+    war_title = war.replace("_", " ").title() if war else "Independent Engagement"
 
     await interaction.response.send_message(
         f"📜 *The Archivist opens the ledger...*\n\n"
@@ -101,7 +107,8 @@ async def resolvebattle(interaction: discord.Interaction,
         f"{roll_explanation}\n"
         f"🔧 Modifier: {modifier}\n"
         f"📟 Final Roll: **{final_roll}**\n\n"
-        f"📖 **Outcome:** {outcome}")
+        f"📖 **Outcome:** {outcome}"
+    )
 
 
 resolvebattle_cmd = app_commands.Command(
@@ -114,8 +121,9 @@ resolvebattle_cmd = app_commands.Command(
 
 
 @is_gm_check()
-@app_commands.describe(name="Name of the war",
-                       change="Momentum adjustment (positive or negative)")
+@app_commands.describe(
+    name="Name of the war", change="Momentum adjustment (positive or negative)"
+)
 async def updatewar(interaction: discord.Interaction, name: str, change: int):
     wars = load_wars()
     for war in wars["wars"]:
@@ -123,10 +131,12 @@ async def updatewar(interaction: discord.Interaction, name: str, change: int):
             war["momentum"] += change
             save_wars(wars)
             await interaction.response.send_message(
-                f"⚖️ Updated **{war['name']}** momentum to {war['momentum']}.")
+                f"⚖️ Updated **{war['name']}** momentum to {war['momentum']}."
+            )
             return
     await interaction.response.send_message(
-        "❌ No active war by that name found.", ephemeral=True)
+        "❌ No active war by that name found.", ephemeral=True
+    )
 
 
 updatewar_cmd = app_commands.Command(
@@ -145,14 +155,17 @@ updatewar_cmd = app_commands.Command(
     new_defender="(Optional) New defender name",
     new_intensity="(Optional) New war intensity (1–20)",
     new_attacker_emoji="(Optional) New emoji for the attacker",
-    new_defender_emoji="(Optional) New emoji for the defender")
-async def editwar(interaction: discord.Interaction,
-                  name: str,
-                  new_attacker: Optional[str] = None,
-                  new_defender: Optional[str] = None,
-                  new_intensity: Optional[int] = None,
-                  new_attacker_emoji: Optional[str] = None,
-                  new_defender_emoji: Optional[str] = None):
+    new_defender_emoji="(Optional) New emoji for the defender",
+)
+async def editwar(
+    interaction: discord.Interaction,
+    name: str,
+    new_attacker: Optional[str] = None,
+    new_defender: Optional[str] = None,
+    new_intensity: Optional[int] = None,
+    new_attacker_emoji: Optional[str] = None,
+    new_defender_emoji: Optional[str] = None,
+):
     wars = load_wars()
     for war in wars["wars"]:
         if war["name"].lower() == name.lower() and war["status"] == "active":
@@ -172,14 +185,14 @@ async def editwar(interaction: discord.Interaction,
                 f"Now {war['attacker_emoji']} **{war['attacker']}** vs {war['defender']} {war['defender_emoji']} | Intensity: {war['intensity']}"
             )
             return
-    await interaction.response.send_message("❌ War not found or inactive.",
-                                            ephemeral=True)
+    await interaction.response.send_message(
+        "❌ War not found or inactive.", ephemeral=True
+    )
 
 
 editwar_cmd = app_commands.Command(
     name="editwar",
-    description=
-    "[GM] Edit war details like attacker, defender, emojis, or intensity.",
+    description="[GM] Edit war details like attacker, defender, emojis, or intensity.",
     callback=editwar,
 )
 
@@ -187,28 +200,29 @@ editwar_cmd = app_commands.Command(
 
 
 @resolvebattle_cmd.autocomplete("attacker")
-async def attacker_autocomplete(interaction: discord.Interaction,
-                                current: str):
+async def attacker_autocomplete(interaction: discord.Interaction, current: str):
     wars = load_wars()
     war_name = getattr(interaction.namespace, "war", None)
 
     if war_name:
         war = next(
-            (w for w in wars["wars"] if w["name"].lower() == war_name.lower()
-             and w["status"] == "active"), None)
+            (
+                w
+                for w in wars["wars"]
+                if w["name"].lower() == war_name.lower() and w["status"] == "active"
+            ),
+            None,
+        )
         if war:
             return [
-                app_commands.Choice(name=war["attacker"],
-                                    value=war["attacker"]),
-                app_commands.Choice(name=war["defender"],
-                                    value=war["defender"])
+                app_commands.Choice(name=war["attacker"], value=war["attacker"]),
+                app_commands.Choice(name=war["defender"], value=war["defender"]),
             ]
     return []
 
 
 @resolvebattle_cmd.autocomplete("defender")
-async def defender_autocomplete(interaction: discord.Interaction,
-                                current: str):
+async def defender_autocomplete(interaction: discord.Interaction, current: str):
     return await attacker_autocomplete(interaction, current)
 
 

@@ -10,16 +10,14 @@ from checks import is_gm_check
 
 
 @app_commands.describe(show_closed="Include closed wars in the list?")
-async def warledger(interaction: discord.Interaction,
-                    show_closed: bool = False):
+async def warledger(interaction: discord.Interaction, show_closed: bool = False):
     wars = load_wars()
-    visible = [
-        w for w in wars["wars"] if show_closed or w["status"] == "active"
-    ]
+    visible = [w for w in wars["wars"] if show_closed or w["status"] == "active"]
 
     if not visible:
         await interaction.response.send_message(
-            "📖 No wars found in the Archivist's records.")
+            "📖 No wars found in the Archivist's records."
+        )
         return
 
     message = "📚 **The Archivist's War Ledger:**\n"
@@ -50,14 +48,13 @@ async def deletewar(interaction: discord.Interaction, war_name: str):
     wars = load_wars()
     war_name_cleaned = war_name.strip().lower()
     before = len(wars["wars"])
-    wars["wars"] = [
-        w for w in wars["wars"] if w["name"].lower() != war_name_cleaned
-    ]
+    wars["wars"] = [w for w in wars["wars"] if w["name"].lower() != war_name_cleaned]
     after = len(wars["wars"])
 
     if before == after:
         await interaction.response.send_message(
-            "⚠️ No war by that name found to delete.", ephemeral=True)
+            "⚠️ No war by that name found to delete.", ephemeral=True
+        )
     else:
         save_wars(wars)
         await interaction.response.send_message(
@@ -73,12 +70,12 @@ deletewar_cmd = app_commands.Command(
 
 
 @deletewar_cmd.autocomplete("war_name")
-async def deletewar_autocomplete(interaction: discord.Interaction,
-                                 current: str):
+async def deletewar_autocomplete(interaction: discord.Interaction, current: str):
     wars = load_wars()
     return [
         app_commands.Choice(name=w["name"], value=w["name"])
-        for w in wars["wars"] if current.lower() in w["name"].lower()
+        for w in wars["wars"]
+        if current.lower() in w["name"].lower()
     ][:25]
 
 

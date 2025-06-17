@@ -8,7 +8,6 @@ from config import GM_ROLE_NAME
 def is_gm_check():
 
     async def predicate(interaction: Interaction):
-        return any(role.name == GM_ROLE_NAME
-                   for role in interaction.user.roles)
+        return any(role.name == GM_ROLE_NAME for role in interaction.user.roles)
 
     return check(predicate)

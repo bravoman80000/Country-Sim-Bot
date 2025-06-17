@@ -11,13 +11,18 @@ async def warbar(interaction: discord.Interaction, war_name: str):
     wars = load_wars()
     war_name_cleaned = normalize_name(war_name)
     war = next(
-        (w
-         for w in wars["wars"] if normalize_name(w["name"]) == war_name_cleaned
-         and w["status"] == "active"), None)
+        (
+            w
+            for w in wars["wars"]
+            if normalize_name(w["name"]) == war_name_cleaned and w["status"] == "active"
+        ),
+        None,
+    )
 
     if not war:
-        await interaction.response.send_message("❌ No active war found.",
-                                                ephemeral=True)
+        await interaction.response.send_message(
+            "❌ No active war found.", ephemeral=True
+        )
         return
 
     intensity = war.get("intensity", 5)
@@ -33,7 +38,8 @@ async def warbar(interaction: discord.Interaction, war_name: str):
         f"📊 **{war['name'].title()}**\n"
         f"{war['attacker']} vs {war['defender']}\n\n"
         f"{bar}\n\n"
-        f"📆 Intensity: {intensity} | 📈 Momentum: {momentum:+}")
+        f"📆 Intensity: {intensity} | 📈 Momentum: {momentum:+}"
+    )
 
 
 # Define the command object after the function

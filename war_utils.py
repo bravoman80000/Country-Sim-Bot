@@ -14,8 +14,7 @@ def load_wars():
     with open(WAR_LOG_PATH, "r") as f:
         return json.load(f)
 
+
 def save_wars(data):
     with open(WAR_LOG_PATH, "w") as f:
         json.dump(data, f, indent=2)
-
-

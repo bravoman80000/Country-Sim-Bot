@@ -9,7 +9,7 @@ import modules.war.war_view
 import modules.war.war_ledger
 import modules.civil.country_queries
 import modules.civil.country_register
-from modules.civil.year_tracker import start_new_turn
+import modules.civil.year_tracker
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 

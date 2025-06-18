@@ -21,7 +21,7 @@ class DebugCommands(commands.Cog):
     # !dumpjson — Dump all countries JSON as a file
     @commands.command(name="!dumpjson")
     async def dump_json(self, ctx):
-        if not any(role.name == "GM (Game Manager)" for role in ctx.author.roles):
+        if not any(role.name == "GM (Game Managers)" for role in ctx.author.roles):
             await ctx.send("❌ You do not have permission to run debug commands.")
             return
 
@@ -32,7 +32,7 @@ class DebugCommands(commands.Cog):
     # !dumpcountry <Country Name> — View specific country JSON
     @commands.command(name="!dumpcountry")
     async def dump_country(self, ctx, *, country: str):
-        if not any(role.name == "GM (Game Manager)" for role in ctx.author.roles):
+        if not any(role.name == "GM (Game Managers)" for role in ctx.author.roles):
             await ctx.send("❌ You do not have permission to run debug commands.")
             return
 
@@ -57,7 +57,7 @@ class DebugCommands(commands.Cog):
     # !resetcountry <Country Name> — Reset a single country to defaults
     @commands.command(name="!resetcountry")
     async def reset_country(self, ctx, *, country: str):
-        if not any(role.name == "GM (Game Manager)" for role in ctx.author.roles):
+        if not any(role.name == "GM (Game Managers)" for role in ctx.author.roles):
             await ctx.send("❌ You do not have permission to run debug commands.")
             return
 

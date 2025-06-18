@@ -43,28 +43,31 @@ class YearTracker(commands.Cog):
             ephemeral=True
         )
 
-    @app_commands.command(name="setturn", description="📜 GM: Set the current year and turn manually.")
-    @app_commands.describe(
-        year="The year to set (e.g., 1446)",
-        turn="The turn to set (1–4)"
+@app_commands.command(name="setturn", description="📜 GM: Set the current year and turn manually.")
+@app_commands.describe(
+    year="The year to set (e.g., 1446)",
+    turn="The turn to set (1–4)"
+)
+async def set_turn(self, interaction: discord.Interaction, year: int, turn: int):
+    # Fetch the full member object
+    member = await interaction.guild.fetch_member(interaction.user.id)
+
+    if not any(role.name == "GM (Game Managers)" for role in member.roles):
+        await interaction.response.send_message("❌ Only GMs may alter the fabric of time.", ephemeral=True)
+        return
+
+    if turn < 1 or turn > 4:
+        await interaction.response.send_message("⚠️ Turn must be between 1 and 4.", ephemeral=True)
+        return
+
+    tracker = {"year": year, "turn": turn}
+    save_tracker(tracker)
+
+    await interaction.response.send_message(
+        f"📝 Time has been rewritten. It is now Turn {turn} of the year {year}.",
+        ephemeral=False
     )
-    async def set_turn(self, interaction: discord.Interaction, year: int, turn: int):
-        member = interaction.guild.get_member(interaction.user.id)
-        if not member or not any(role.name == "GM (Game Manager)" for role in member.roles):
-            await interaction.response.send_message("❌ Only GMs may alter the fabric of time.", ephemeral=True)
-            return
 
-        if turn < 1 or turn > 4:
-            await interaction.response.send_message("⚠️ Turn must be between 1 and 4.", ephemeral=True)
-            return
-
-        tracker = {"year": year, "turn": turn}
-        save_tracker(tracker)
-
-        await interaction.response.send_message(
-            f"📝 Time has been rewritten. It is now Turn {turn} of the year {year}.",
-            ephemeral=False
-        )
 
 
 async def setup(bot):

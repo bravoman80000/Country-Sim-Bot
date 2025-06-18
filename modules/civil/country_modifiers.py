@@ -47,7 +47,7 @@ class CountryModifiers(commands.Cog):
             return
 
         # GM check
-        if not any(role.name == "GM (Game Manager)" for role in interaction.user.roles):
+        if not any(role.name == "GM (Game Managers)" for role in interaction.user.roles):
             await interaction.response.send_message("❌ Only GMs may alter the course of nations.", ephemeral=True)
             return
 

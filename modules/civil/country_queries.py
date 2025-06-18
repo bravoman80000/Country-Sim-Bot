@@ -1,15 +1,20 @@
 import discord  # type: ignore
 from discord import app_commands  # type: ignore
 from discord.ext import commands  # type: ignore
+from discord import Interaction
 import os
 import json
 
-DATA_PATH = os.path.join("data", "countries.json")
+DATA_PATH = "/data/countries.json"
 
 # === Load Country Data ===
 def load_countries():
+    if not os.path.exists(DATA_PATH):
+        with open(DATA_PATH, "w") as f:
+            json.dump({}, f)
     with open(DATA_PATH, "r") as f:
         return json.load(f)
+
 
 # === Autocomplete Helper ===
 async def autocomplete_country_names(interaction: discord.Interaction, current: str):

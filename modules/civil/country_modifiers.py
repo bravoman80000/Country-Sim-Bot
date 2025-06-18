@@ -1,28 +1,36 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
+from discord import Interaction
 import os
 import json
 import random
 
-DATA_PATH = os.path.join("data", "countries.json")
+DATA_PATH = "/data/countries.json"
 
+# === Load Countries Safely ===
 def load_countries():
+    # Ensure file exists before trying to read it
+    if not os.path.exists(DATA_PATH):
+        with open(DATA_PATH, "w") as f:
+            json.dump({}, f)  # Start with an empty dict if file is missing
+
     with open(DATA_PATH, "r") as f:
         return json.load(f)
 
+# === Save Countries ===
 def save_countries(data):
     with open(DATA_PATH, "w") as f:
         json.dump(data, f, indent=4)
 
-async def autocomplete_country_names(interaction: discord.Interaction, current: str):
-    # You can still use sync file IO here safely for small files
+# === Country Name Autocomplete (for slash commands) ===
+async def autocomplete_country_names(interaction: Interaction, current: str):
     data = load_countries()
     return [
         app_commands.Choice(name=name, value=name)
         for name in data
         if current.lower() in name.lower()
-    ][:25]
+    ][:25]  # Discord's autocomplete limit
 
 
 class CountryModifiers(commands.Cog):
@@ -52,20 +60,26 @@ class CountryModifiers(commands.Cog):
         stat_path = category.split(".")
         target = data
         for key in stat_path[:-1]:
-            target = target[key]
+          target = target[key]
         target_field = stat_path[-1]
-        target[target_field] += result
+
+        # 🛡 Safe numeric check
+        if isinstance(target.get(target_field), (int, float)):
+           target[target_field] += result
+        else:
+          target[target_field] = result  # fallback assignment if the field isn't a number
 
         # Update file
         countries[country] = data
         save_countries(countries)
 
         await interaction.response.send_message(
-            f"📈 {category.replace('.', ' ').title()} for **{country}** modified by **{result}**.",
-            ephemeral=False
+          f"📈 {category.replace('.', ' ').title()} for **{country}** modified by **{result}**.",
+         ephemeral=False
         )
 
         await interaction.user.send(f"🕵️ GM Log: {country}'s {category} is now {target[target_field]}")
+
 
     # === /eco Command ===
     @app_commands.command(name="eco", description="GM: Modify a country's economy score.")
@@ -111,6 +125,7 @@ class CountryModifiers(commands.Cog):
     async def supply(self, interaction: discord.Interaction, country: str, amount: int, method: app_commands.Choice[str]):
         await self.modify_stat(interaction, country, "supply", amount, method.value)
             # === /military Command ===
+            
     @app_commands.command(name="military", description="GM: Modify a country's military value (hidden score, not tier directly).")
     @app_commands.describe(country="The target country", amount="Amount to modify", method="Flat or Roll")
     @app_commands.choices(method=[

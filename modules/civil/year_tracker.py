@@ -4,17 +4,18 @@ from discord import app_commands
 import os
 import json
 
-DATA_PATH = os.path.join("data", "turn_tracker.json")
+TRACKER_PATH = "/data/turn_tracker.json"
 
 def load_tracker():
-    if not os.path.exists(DATA_PATH):
+    if not os.path.exists(TRACKER_PATH):
         return {"year": 1444, "turn": 1}
-    with open(DATA_PATH, "r") as f:
+    with open(TRACKER_PATH, "r") as f:
         return json.load(f)
 
 def save_tracker(data):
-    with open(DATA_PATH, "w") as f:
+    with open(TRACKER_PATH, "w") as f:
         json.dump(data, f, indent=4)
+
 
 class YearTracker(commands.Cog):
     def __init__(self, bot):

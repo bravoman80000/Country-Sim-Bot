@@ -5,15 +5,13 @@ import os
 import json
 import random
 
-DATA_PATH = os.path.join("data", "countries.json")
+DATA_PATH = "/data/countries.json"
 
 # Ensure the data file exists
-os.makedirs("data", exist_ok=True)
-if not os.path.exists(DATA_PATH):
-    with open(DATA_PATH, "w") as f:
-        json.dump({}, f, indent=4)
-
 def load_countries():
+    if not os.path.exists(DATA_PATH):
+        with open(DATA_PATH, "w") as f:
+            json.dump({}, f)
     with open(DATA_PATH, "r") as f:
         return json.load(f)
 

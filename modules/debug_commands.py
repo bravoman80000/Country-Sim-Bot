@@ -4,7 +4,7 @@ import os
 import json
 import io
 
-DATA_PATH = os.path.join("data", "countries.json")
+DATA_PATH = "/data/countries.json"
 
 def load_countries():
     with open(DATA_PATH, "r") as f:

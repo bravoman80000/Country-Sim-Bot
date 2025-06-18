@@ -49,10 +49,8 @@ class YearTracker(commands.Cog):
         turn="The turn to set (1–4)"
     )
     async def set_turn(self, interaction: discord.Interaction, year: int, turn: int):
-        # FIX: Properly fetch member object to get full role data
-        member = await interaction.guild.fetch_member(interaction.user.id)
-
-        if not any(role.name == "GM (Game Manager)" for role in member.roles):
+        member = interaction.user
+        if not isinstance(member, discord.Member) or not any(role.name == "GM (Game Manager)" for role in member.roles):
             await interaction.response.send_message("❌ Only GMs may alter the fabric of time.", ephemeral=True)
             return
 

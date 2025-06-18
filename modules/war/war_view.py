@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from war_utils import load_wars
+from modules.war.war_utils import load_wars
 from utils import normalize_name
 
 

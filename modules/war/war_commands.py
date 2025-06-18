@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from war_utils import load_wars, save_wars
+from modules.war.war_utils import load_wars, save_wars
 from config import GM_ROLE_NAME
 from utils import interpret_roll, normalize_name
 from checks import is_gm_check

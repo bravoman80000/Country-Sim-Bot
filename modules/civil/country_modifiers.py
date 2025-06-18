@@ -15,13 +15,15 @@ def save_countries(data):
     with open(DATA_PATH, "w") as f:
         json.dump(data, f, indent=4)
 
-def autocomplete_country_names(current: str):
+async def autocomplete_country_names(interaction: discord.Interaction, current: str):
+    # You can still use sync file IO here safely for small files
     data = load_countries()
     return [
         app_commands.Choice(name=name, value=name)
         for name in data
         if current.lower() in name.lower()
     ][:25]
+
 
 class CountryModifiers(commands.Cog):
     def __init__(self, bot):
